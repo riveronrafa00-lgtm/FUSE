@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacto — FUSE Consultoría de Marketing</title>
+<meta name="description" content="Habla con FUSE sobre tu marca y tu negocio. Cuéntanos qué necesitas y te contactamos para definir el punto de partida.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css?v=20260910">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html" aria-label="FUSE — inicio">
+      <img class="brand-mark" src="assets/img/logo-mark.svg" alt="" />
+      <span class="brand-word">FUSE</span>
+    </a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="quienes-somos.html">Quiénes somos</a>
+      <a href="servicios.html">Servicios</a>
+      <a href="contacto.html" aria-current="page">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary" href="#form" data-magnetic>Hablemos</a>
+      <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-mobile" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="nav-mobile" id="nav-mobile" data-nav-mobile>
+    <a href="index.html">Inicio</a>
+    <a href="quienes-somos.html">Quiénes somos</a>
+    <a href="servicios.html">Servicios</a>
+    <a href="contacto.html" aria-current="page">Contacto</a>
+    <a class="btn btn-primary btn-block" href="#form">Hablemos</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section" style="padding-block: calc(var(--nav-h) + 2.5rem) 2rem;">
+    <div class="halo halo-blue" style="width:480px;height:480px;top:-15%;right:-10%;"></div>
+    <div class="container">
+      <span class="eyebrow">Contacto</span>
+      <h1 class="section-title" style="font-size: clamp(2.1rem, 4.4vw, 3.4rem); max-width: 22ch;">Hablemos de conectar, activar y escalar tu marca.</h1>
+      <p class="lede-lg" style="max-width: 56ch;">Cuéntanos en qué está tu negocio hoy. Te respondemos con el punto de partida correcto, sin compromiso.</p>
+    </div>
+  </section>
+
+  <section class="section section-tight" id="form">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- INFO -->
+        <div data-reveal>
+          <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Datos de contacto</h2>
+          <p style="color: var(--ink-mute); font-size: .92rem;">Estos datos son un marcador de posición mientras terminamos de configurar el sitio — se actualizan en segundos apenas los tengamos.</p>
+
+          <div class="contact-info-list">
+            <div class="contact-info-item">
+              <span class="contact-info-icon" aria-hidden="true">✉</span>
+              <div>
+                <h4>Email</h4>
+                <a href="mailto:hola@fuseconsultora.com" class="contact-placeholder">Pendiente — agrega tu email real</a>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <span class="contact-info-icon" aria-hidden="true">☎</span>
+              <div>
+                <h4>Teléfono / WhatsApp</h4>
+                <p class="contact-placeholder">Pendiente — agrega tu número real</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <span class="contact-info-icon" aria-hidden="true">📍</span>
+              <div>
+                <h4>Ubicación</h4>
+                <p class="contact-placeholder">Pendiente — tu ciudad y país</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="social-row" aria-label="Redes sociales">
+            <a href="https://www.instagram.com/fuse_plus/" target="_blank" rel="noopener" aria-label="FUSE en Instagram">IG</a>
+            <a href="#" aria-label="LinkedIn (pendiente de configurar)">in</a>
+          </div>
+
+          <div class="map-note">
+            Cuando tengas tus datos reales de contacto (email, teléfono/WhatsApp, ciudad) y tu LinkedIn, dímelos y los dejo listos en el sitio.
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div data-reveal>
+          <form class="card" data-contact-form action="mailto:hola@fuseconsultora.com" method="post" enctype="text/plain">
+            <div class="field">
+              <label for="nombre">Nombre completo</label>
+              <input type="text" id="nombre" name="nombre" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="telefono">Teléfono / WhatsApp <span class="hint">(opcional)</span></label>
+              <input type="tel" id="telefono" name="telefono" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="servicio">¿Qué te interesa?</label>
+              <select id="servicio" name="servicio">
+                <option value="">Selecciona una opción</option>
+                <option value="Diagnóstico / Conecta">Diagnóstico y estrategia de marca (Conecta)</option>
+                <option value="Ejecución digital / Activa">Ejecución de marketing digital (Activa)</option>
+                <option value="Crecimiento / Escala">Optimización y crecimiento (Escala)</option>
+                <option value="Fusión Base">Paquete Fusión Base</option>
+                <option value="Fusión Activa">Paquete Fusión Activa</option>
+                <option value="Fusión Total">Paquete Fusión Total</option>
+                <option value="No estoy seguro">Aún no lo sé — quiero orientación</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="mensaje">Cuéntanos sobre tu negocio</label>
+              <textarea id="mensaje" name="mensaje" required></textarea>
+            </div>
+            <div class="field-check">
+              <input type="checkbox" id="privacidad" name="privacidad" required>
+              <label for="privacidad">He leído y acepto la <a href="politica-privacidad.html">política de privacidad</a>.</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" data-magnetic>Enviar mensaje</button>
+            <p class="form-note">Al enviar, se abrirá tu programa de correo con el mensaje redactado — así garantizamos que tu solicitud llega directo a nuestra bandeja.</p>
+            <div class="form-success" data-form-success role="status">✓ Se abrió tu correo con el mensaje listo. Si no ocurrió nada, escríbenos directo a nuestro email.</div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/img/logo-mark.svg" alt="" />
+          <span class="brand-word">FUSE</span>
+        </a>
+        <p>Consultoría de marketing para PyMEs y negocios locales. Conecta. Activa. Escala.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="quienes-somos.html">Quiénes somos</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html#conecta">Conecta</a></li>
+          <li><a href="servicios.html#activa">Activa</a></li>
+          <li><a href="servicios.html#escala">Escala</a></li>
+          <li><a href="servicios.html#paquetes">Paquetes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="mailto:hola@fuseconsultora.com">hola@fuseconsultora.com</a></li>
+          <li><p>Tu ciudad, país</p></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span data-year>2026</span> FUSE. Todos los derechos reservados.</p>
+      <div class="footer-legal">
+        <a href="politica-privacidad.html">Política de privacidad</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script defer src="lib/manifest.js"></script>
+<script defer src="main.js?v=20260910"></script>
+</body>
+</html>
