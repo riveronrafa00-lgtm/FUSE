@@ -477,6 +477,29 @@ h1, h2, h3, h4 {
 .why-item h3 { font-size: 1.1rem; margin-bottom: .6rem; }
 .why-item p { color: var(--ink-mute); font-size: .93rem; }
 
+/* --- Testimonios --- */
+.testimonials-grid { display: grid; gap: 1.4rem; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .testimonials-grid { grid-template-columns: repeat(3, 1fr); } }
+.testimonial-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: clamp(1.6rem, 2.6vw, 2rem);
+  display: flex; flex-direction: column; gap: 1.2rem;
+}
+.testimonial-quote { font-size: .98rem; color: var(--ink); line-height: 1.6; flex: 1; }
+.testimonial-quote::before {
+  content: "\201C"; color: var(--blue-2); font-family: var(--font-display); font-weight: 700;
+  font-size: 1.8rem; line-height: 0; display: inline-block; margin-right: .2rem; vertical-align: -0.35rem;
+}
+.testimonial-person { display: flex; align-items: center; gap: .8rem; }
+.testimonial-avatar {
+  width: 42px; height: 42px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: .82rem; color: var(--bg);
+}
+.testimonial-name { font-size: .92rem; font-weight: 600; }
+.testimonial-role { font-size: .8rem; color: var(--ink-mute); }
+.testimonials-note { margin-top: 2rem; }
+
 /* --- CTA final --- */
 .cta-final {
   position: relative; overflow: clip;
