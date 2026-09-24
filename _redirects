@@ -1,0 +1,15 @@
+# =============================================================
+# Cloudflare Pages — redirecciones
+# Docs: https://developers.cloudflare.com/pages/configuration/redirects/
+# Nota: Pages ya sirve /contacto para contacto.html (URLs limpias).
+# =============================================================
+/contact        /contacto              301
+/contactanos    /contacto              301
+/services       /servicios             301
+/paquetes       /servicios#paquetes    301
+/precios        /servicios#paquetes    301
+/about          /quienes-somos         301
+/nosotros       /quienes-somos         301
+/privacidad     /politica-privacidad   301
+/privacy        /politica-privacidad   301
+/instagram      https://www.instagram.com/fuse_plus/ 302

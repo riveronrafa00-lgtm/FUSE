@@ -1,50 +1,91 @@
 # FUSE — sitio web
 
-Consultoría de marketing para PyMEs y negocios locales. *Conecta. Activa. Escala.*
+Agencia de marketing 360 para empresas y negocios de todos los tamaños. *Conecta. Activa. Escala.*
 
-## Qué hay aquí
+Sitio estático (HTML + CSS + JavaScript sin frameworks) listo para **Cloudflare Pages**, con el código respaldado en **GitHub**. Cada `git push` a `main` publica una versión nueva automáticamente.
 
-Sitio estático (HTML + CSS + JS, sin frameworks ni instalación) con 5 páginas:
+> 📘 El manual completo paso a paso está en `docs/Manual_FUSE_Cloudflare.docx`.
 
-- `index.html` — Inicio
-- `quienes-somos.html` — Quiénes somos
-- `servicios.html` — Servicios (catálogo completo)
-- `contacto.html` — Contacto
-- `politica-privacidad.html` — Política de privacidad
+## Páginas
 
-## Ver el sitio en tu computadora
-
-No necesitas instalar nada especial. Dos formas:
-
-1. **Doble clic en `index.html`** — se abre directo en el navegador.
-2. Con Python instalado, desde esta carpeta: `python3 -m http.server 8000` y abre `http://localhost:8000` en el navegador.
-
-## Pendientes antes de publicar
-
-- **Logo real en alta resolución**: hoy el símbolo es una recreación en SVG (`assets/img/logo-mark.svg`) porque el archivo del manual de marca es de muy baja resolución. Cuando llegue el logo real como archivo (no pegado en el chat), se reemplaza en un momento.
-- **Datos de contacto reales**: email, teléfono/WhatsApp y ciudad. Hoy aparecen como marcadores de posición en `contacto.html`, `lib/manifest.js` y en los pies de página de todas las páginas. Instagram ya está cargado (`https://www.instagram.com/fuse_plus/`); falta LinkedIn.
-- **Testimonios reales**: en `index.html` hay un espacio ya armado ("Lo que dicen nuestros clientes") con 3 tarjetas de ejemplo marcadas como demo — reemplázalas por reseñas reales cuando las tengas.
-- **Imágenes**: la estructura está lista para recibirlas en `assets/img/` (siguiente paso del proceso).
-- **Precios de los paquetes** (Fusión Base / Activa / Total): hoy se muestran como "Cotización personalizada" en `servicios.html`.
-- **Revisión legal** de `politica-privacidad.html` (es una plantilla base).
-
-## Publicar en Hostinger
-
-Esta sesión no tiene salida de red hacia los dominios de Hostinger (política del entorno remoto), así que no pude conectar el hosting automáticamente. La forma más simple de publicar, sin necesitar eso:
-
-1. Descarga `fuse-sitio-hostinger.zip` (te lo compartí en el chat).
-2. En hPanel de Hostinger, entra a **Archivos → Administrador de archivos** y abre la carpeta `public_html` de tu dominio.
-3. Sube el zip ahí y usa la opción **Extraer** (o descomprímelo en tu computadora y arrastra todos los archivos/carpetas dentro de `public_html`).
-4. Verifica que `index.html` quede directamente dentro de `public_html` (no dentro de una subcarpeta extra).
-5. Visita tu dominio — el sitio ya debería verse.
+| Archivo | URL publicada | Qué contiene |
+|---|---|---|
+| `index.html` | `/` | Hero animado, cifras, pilares, proceso, recomendador de paquetes, testimonios, FAQ |
+| `servicios.html` | `/servicios` | 11 servicios en 3 pilares, paquetes, tabla comparativa, FAQ |
+| `quienes-somos.html` | `/quienes-somos` | Historia, origen del nombre, valores, red de especialistas |
+| `contacto.html` | `/contacto` | Agenda (virtual/presencial) y formulario con envío real, validación y anti-spam |
+| `politica-privacidad.html` | `/politica-privacidad` | Plantilla legal (revisar con abogado) |
+| `404.html` | cualquier URL inexistente | Página de error con la marca |
 
 ## Estructura
 
 ```
-index.html, quienes-somos.html, servicios.html, contacto.html, politica-privacidad.html
-styles.css        ← todos los estilos
-main.js           ← toda la interactividad
-lib/manifest.js   ← datos de marca y contacto (edítalo para actualizar datos reales)
-assets/           ← imágenes, favicon
-.htaccess         ← configuración de caché para cuando se publique en Hostinger
+index.html … 404.html      páginas
+styles.css                 todos los estilos (tokens de color al inicio)
+main.js                    toda la interactividad
+lib/manifest.js            ⭐ datos de contacto y redes (edita AQUÍ)
+lib/boot.js                evita parpadeos al cargar
+functions/api/contact.js   Cloudflare Pages Function: recibe el formulario y envía el correo
+assets/                    logo, favicon, íconos PNG, og-image.png y tipografías (assets/fonts)
+_headers                   cabeceras de seguridad y caché (Cloudflare)
+_redirects                 redirecciones cortas (/contact, /precios, /instagram…)
+robots.txt, sitemap.xml    SEO
+site.webmanifest           ícono al "añadir a pantalla de inicio"
+scripts/check-site.mjs     revisión de enlaces rotos (también corre en GitHub Actions)
+wrangler.toml.example      config opcional para pruebas locales con Wrangler
 ```
+
+## Editar lo más común
+
+- **Email, teléfono, WhatsApp, ciudad, redes** → `lib/manifest.js`. Si un campo está vacío, se oculta solo. Al poner el WhatsApp aparece el botón flotante verde.
+- **Textos** → directamente en cada `.html`.
+- **Colores** → variables `--blue`, `--orange`, `--violet`… al inicio de `styles.css`.
+- Si cambias `styles.css` o `main.js`, sube el número `?v=20260924` en los HTML para que los navegadores descarguen la versión nueva.
+
+## Formulario de contacto
+
+`POST /api/contact` (Cloudflare Pages Function). Configura en Cloudflare → tu proyecto → **Settings → Variables and Secrets**:
+
+| Variable | Tipo | Ejemplo |
+|---|---|---|
+| `RESEND_API_KEY` | Secreto | `re_…` (cuenta gratuita en resend.com) |
+| `CONTACT_TO` | Texto (obligatoria) | `hola@fuseconsultora.com` |
+| `CONTACT_FROM` | Texto | `FUSE Web <web@fuseconsultora.com>` (dominio verificado en Resend) |
+| `TURNSTILE_SECRET_KEY` | Secreto, opcional | clave secreta de Turnstile |
+| `ALLOWED_ORIGINS` | Texto, opcional | `https://fuseconsultora.com,https://www.fuseconsultora.com` |
+
+Opcional: vincula un namespace KV como `CONTACT_KV` para guardar copia de cada mensaje y limitar a 5 envíos por hora por IP.
+
+**Sin configurar nada**, el formulario sigue funcionando: abre WhatsApp con el mensaje redactado (o el correo, si hay `contact.email` en el manifest).
+
+## Agenda de reuniones (Google Calendar)
+
+En Contacto, las tarjetas **Videollamada** y **Presencial** abren un modal con la página de reservas de Google Calendar. El llamado principal del sitio es **Contáctanos**.
+
+1. En Google Calendar: **Crear → Agenda de citas**, una para videollamada (Google Meet) y otra presencial.
+2. En cada una: **Compartir → Insertar en el sitio web → En línea** y copia la URL del `src` (termina en `?gv=true`).
+3. Pégalas en `lib/manifest.js` → `booking.virtualUrl` y `booking.presencialUrl`.
+
+Sin enlaces configurados, los botones llevan al formulario con la modalidad ya marcada.
+
+## Ver en local
+
+```bash
+python3 -m http.server 8000          # sitio estático → http://localhost:8000
+npx wrangler pages dev .             # sitio + formulario real (usa .dev.vars, ver .dev.vars.example)
+node scripts/check-site.mjs          # revisar enlaces
+```
+
+## Publicar (resumen)
+
+1. Cloudflare → **Workers & Pages → Create → Pages → Connect to Git** → elige este repositorio.
+2. Framework preset **None**, build command **vacío**, output directory **/** (raíz).
+3. **Save and Deploy**. Luego **Custom domains** para conectar tu dominio.
+
+## Pendientes antes de lanzar
+
+- Email del sitio: hoy vacío a propósito; se activa poniendo `contact.email` en el manifest y `CONTACT_TO` en Cloudflare.
+- Confirmar el dominio: hoy las URLs canónicas, `sitemap.xml` y `robots.txt` usan `https://fuseconsultora.com`.
+- Testimonios: sección oculta (`hidden` en `index.html`) hasta tener reseñas reales.
+- Logo: se usa el imagotipo oficial (`assets/img/fuse-logo.webp`, `fuse-imagotipo.webp`, `fuse-simbolo.webp`). Si llega el archivo vectorial (SVG/AI), conviene reemplazarlos.
+- Revisión legal de la política de privacidad.

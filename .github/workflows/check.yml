@@ -1,0 +1,15 @@
+# Revisa el sitio en cada push / pull request (enlaces rotos, anclas, sintaxis JS).
+# Cloudflare Pages despliega por su cuenta al detectar el push; esto es una red de seguridad.
+name: Revisión del sitio
+on:
+  push:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/check-site.mjs

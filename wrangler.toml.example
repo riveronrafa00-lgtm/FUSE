@@ -1,0 +1,18 @@
+# EJEMPLO — solo para pruebas locales o deploy manual con Wrangler.
+# Para usarlo: cópialo como wrangler.toml. OJO: si subes un wrangler.toml a GitHub,
+# Cloudflare lo toma como fuente de verdad y bloquea editar variables desde el panel.
+name = "fuse"
+pages_build_output_dir = "."
+compatibility_date = "2026-09-01"
+
+# Variables NO secretas (los secretos van en el panel: Settings → Variables and Secrets)
+[vars]
+CONTACT_TO = "hola@fuseconsultora.com"
+CONTACT_FROM = "FUSE Web <web@fuseconsultora.com>"
+ALLOWED_ORIGINS = "https://fuseconsultora.com,https://www.fuseconsultora.com"
+
+# Opcional: guarda una copia de cada mensaje en Workers KV (respaldo + límite anti-abuso).
+# Crea el namespace en el panel (Storage & Databases → KV) y descomenta:
+# [[kv_namespaces]]
+# binding = "CONTACT_KV"
+# id = "PEGA_AQUI_EL_ID_DEL_NAMESPACE"

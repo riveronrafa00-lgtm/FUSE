@@ -1,0 +1,5 @@
+# Copia este archivo como .dev.vars para probar el formulario en local con
+#   npx wrangler pages dev .
+# (.dev.vars está en .gitignore: nunca se sube a GitHub)
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
