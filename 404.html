@@ -35,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=20260924">
+<link rel="stylesheet" href="styles.css?v=20260925">
 <script src="lib/boot.js"></script>
 
 </head>
@@ -142,12 +142,29 @@
   </div>
 </footer>
 
+<dialog class="booking" data-booking-dialog aria-labelledby="booking-title">
+  <div class="booking-head">
+    <div>
+      <p class="booking-kicker">Diagnóstico sin costo</p>
+      <h2 id="booking-title">Agenda tu reunión con FUSE</h2>
+    </div>
+    <button class="booking-close" type="button" data-booking-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="booking-tabs" role="tablist" aria-label="Modalidad de la reunión">
+    <button type="button" role="tab" data-booking-tab="virtual" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg><span>Videollamada</span></button>
+    <button type="button" role="tab" data-booking-tab="presencial" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10M2 21h20M8 7h4M8 11h4M8 15h4"/></svg><span>Presencial</span></button>
+  </div>
+  <p class="booking-note" data-booking-note></p>
+  <div class="booking-frame"><div class="booking-loading" aria-hidden="true"><span class="spinner"></span></div></div>
+  <p class="booking-alt">¿No carga el calendario? <a href="#" target="_blank" rel="noopener" data-booking-newtab>Ábrelo en una pestaña nueva</a> · ¿Prefieres escribirnos? <a href="contacto.html#form" data-booking-close>Usa el formulario</a>.</p>
+</dialog>
+
 <div class="fab-stack">
   <button class="fab fab-top" type="button" data-to-top aria-label="Volver arriba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
   <a class="fab fab-wa" href="#" data-wa-fab target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.34-2.92c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42h-.47a.9.9 0 0 0-.66.31 2.77 2.77 0 0 0-.86 2.06 4.8 4.8 0 0 0 1 2.55c.13.16 1.76 2.7 4.28 3.78 1.6.69 2.22.75 3.02.63.49-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></a>
 </div>
 
-<script defer src="lib/manifest.js?v=20260924"></script>
-<script defer src="main.js?v=20260924"></script>
+<script defer src="lib/manifest.js?v=20260925"></script>
+<script defer src="main.js?v=20260925"></script>
 </body>
 </html>

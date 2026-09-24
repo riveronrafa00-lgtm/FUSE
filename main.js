@@ -31,6 +31,7 @@
       whatsapp: contact.whatsapp ? { text: contact.phone || "WhatsApp", href: waLink() } : null,
       city: contact.city ? { text: contact.city } : null,
       hours: contact.hours ? { text: contact.hours } : null,
+      meetAddress: contact.meetAddress ? { text: contact.meetAddress } : null,
       instagram: contact.instagram ? { href: contact.instagram } : null,
       linkedin: contact.linkedin ? { href: contact.linkedin } : null,
       facebook: contact.facebook ? { href: contact.facebook } : null,
@@ -41,7 +42,11 @@
       var v = values[key];
       // El contenedor a ocultar si no hay dato (ej. el <li> o el bloque completo)
       var wrap = el.closest("[data-brand-wrap]") || el;
-      if (!v) { wrap.hidden = true; return; }
+      if (!v) {
+        // data-brand-optional: si no hay dato se conserva el texto por defecto
+        if (!el.hasAttribute("data-brand-optional")) wrap.hidden = true;
+        return;
+      }
       wrap.hidden = false;
       if (v.text && !el.hasAttribute("data-brand-keep-text")) el.textContent = v.text;
       if (v.href && el.tagName === "A") el.setAttribute("href", v.href);
@@ -307,6 +312,12 @@
       $$("option", sel).forEach(function (o) { if (o.value === pre) sel.value = pre; });
     }
 
+    var preMode = new URLSearchParams(location.search).get("modalidad");
+    if (preMode) {
+      var radio = $('input[name="modalidad"][value="' + preMode.replace(/"/g, "") + '"]', form);
+      if (radio) radio.checked = true;
+    }
+
     if (msg && counter) {
       var max = parseInt(msg.getAttribute("maxlength"), 10) || 2000;
       var upd = function () { counter.textContent = msg.value.length + " / " + max; };
@@ -343,6 +354,7 @@
         "Email: " + (fd.get("email") || ""),
         "Teléfono: " + (fd.get("telefono") || "(no indicado)"),
         "Servicio de interés: " + (fd.get("servicio") || "(no indicado)"),
+        "Modalidad de reunión: " + (fd.get("modalidad") || "(no indicada)"),
         "Presupuesto mensual: " + (fd.get("presupuesto") || "(no indicado)"),
         "",
         "Mensaje:",
@@ -394,6 +406,91 @@
     });
   }
 
+  /* ---------- Agenda de reuniones (Google Calendar en un modal) ---------- */
+  function initBooking() {
+    var cfg = data.booking || {};
+    var urls = { virtual: cfg.virtualUrl || "", presencial: cfg.presencialUrl || "" };
+    var dlg = $("[data-booking-dialog]");
+    var triggers = $$("[data-booking]");
+    if (!urls.virtual && !urls.presencial) {
+      // Sin agenda configurada: los botones llevan al formulario con la modalidad elegida
+      triggers.forEach(function (t) {
+        var mode = t.getAttribute("data-booking");
+        var inPage = !!$("[data-contact-form]");
+        var q = mode === "virtual" ? "Videollamada" : mode === "presencial" ? "Presencial" : "";
+        t.setAttribute("href", (inPage ? "" : "contacto.html") + (q ? "?modalidad=" + encodeURIComponent(q) : "") + "#form");
+        if (inPage && q) t.addEventListener("click", function () {
+          var r = $('input[name="modalidad"][value="' + q + '"]'); if (r) r.checked = true;
+        });
+      });
+      return;
+    }
+    // Solo el enlace largo de Google (…/calendar/appointments/…) se puede incrustar;
+    // los enlaces cortos (calendar.app.google) se abren en una pestaña nueva.
+    var embeddable = function (u) { return /calendar\.google\.com\/calendar\/appointments|cal\.com\/|calendly\.com\//.test(u); };
+    if (!dlg || typeof dlg.showModal !== "function" || !embeddable(urls.virtual || urls.presencial)) {
+      // Navegador antiguo: abre la página de reservas en otra pestaña
+      triggers.forEach(function (t) {
+        var mode = t.getAttribute("data-booking") || (urls.virtual ? "virtual" : "presencial");
+        t.setAttribute("href", urls[mode] || urls.virtual || urls.presencial);
+        t.setAttribute("target", "_blank"); t.setAttribute("rel", "noopener");
+      });
+      return;
+    }
+    var frameBox = $(".booking-frame", dlg);
+    var note = $("[data-booking-note]", dlg);
+    var tabs = $$("[data-booking-tab]", dlg);
+    var lastFocus = null;
+
+    tabs.forEach(function (tab) {
+      if (!urls[tab.getAttribute("data-booking-tab")]) tab.hidden = true;
+      tab.addEventListener("click", function () { select(tab.getAttribute("data-booking-tab")); });
+    });
+    if (tabs.filter(function (t) { return !t.hidden; }).length < 2) $(".booking-tabs", dlg).hidden = true;
+
+    function embedUrl(u) {
+      // Las páginas de reserva de Google aceptan ?gv=true para incrustarse
+      if (/calendar\.google\.com\/calendar\/appointments/.test(u) && u.indexOf("gv=true") === -1) u += (u.indexOf("?") === -1 ? "?" : "&") + "gv=true";
+      return u;
+    }
+    function select(mode) {
+      if (!urls[mode]) mode = urls.virtual ? "virtual" : "presencial";
+      tabs.forEach(function (t) { t.setAttribute("aria-selected", String(t.getAttribute("data-booking-tab") === mode)); });
+      note.textContent = cfg[mode + "Note"] || "";
+      var old = $("iframe", frameBox); if (old) old.remove();
+      frameBox.classList.add("is-loading");
+      var f = document.createElement("iframe");
+      f.src = embedUrl(urls[mode]);
+      f.title = "Calendario de reservas — " + (mode === "virtual" ? "videollamada" : "presencial");
+      f.loading = "lazy";
+      f.addEventListener("load", function () { frameBox.classList.remove("is-loading"); });
+      frameBox.appendChild(f);
+      var nt = $("[data-booking-newtab]", dlg); if (nt) nt.setAttribute("href", urls[mode]);
+      if (typeof window.zaraz !== "undefined") try { window.zaraz.track("booking_open", { mode: mode }); } catch (_) {}
+    }
+    function open(mode) {
+      lastFocus = document.activeElement;
+      select(mode);
+      dlg.showModal();
+      document.body.classList.add("is-locked");
+    }
+    dlg.addEventListener("close", function () {
+      document.body.classList.remove("is-locked");
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+    });
+    dlg.addEventListener("click", function (e) {
+      if (e.target === dlg || e.target.closest("[data-booking-close]")) dlg.close();
+    });
+    triggers.forEach(function (t) {
+      t.addEventListener("click", function (e) {
+        if (e.metaKey || e.ctrlKey) return;
+        e.preventDefault();
+        open(t.getAttribute("data-booking") || "virtual");
+      });
+    });
+    if (location.hash === "#agendar") open("virtual");
+  }
+
   /* ---------- Botón flotante de WhatsApp ---------- */
   function initWhatsApp() {
     var fab = $("[data-wa-fab]");
@@ -422,6 +519,7 @@
     safe(initScrollSpy, "initScrollSpy");
     safe(initQuiz, "initQuiz");
     safe(initContactForm, "initContactForm");
+    safe(initBooking, "initBooking");
     safe(initWhatsApp, "initWhatsApp");
     safe(mountYear, "mountYear");
     document.documentElement.classList.add("is-ready");

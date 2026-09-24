@@ -13,7 +13,7 @@ Sitio estático (HTML + CSS + JavaScript sin frameworks) listo para **Cloudflare
 | `index.html` | `/` | Hero animado, cifras, pilares, proceso, recomendador de paquetes, testimonios, FAQ |
 | `servicios.html` | `/servicios` | 11 servicios en 3 pilares, paquetes, tabla comparativa, FAQ |
 | `quienes-somos.html` | `/quienes-somos` | Historia, origen del nombre, valores, red de especialistas |
-| `contacto.html` | `/contacto` | Formulario con envío real, validación y anti-spam |
+| `contacto.html` | `/contacto` | Agenda (virtual/presencial) y formulario con envío real, validación y anti-spam |
 | `politica-privacidad.html` | `/politica-privacidad` | Plantilla legal (revisar con abogado) |
 | `404.html` | cualquier URL inexistente | Página de error con la marca |
 
@@ -57,6 +57,16 @@ wrangler.toml.example      config opcional para pruebas locales con Wrangler
 Opcional: vincula un namespace KV como `CONTACT_KV` para guardar copia de cada mensaje y limitar a 5 envíos por hora por IP.
 
 **Sin configurar nada**, el formulario sigue funcionando: abre el programa de correo del visitante con el mensaje redactado.
+
+## Agenda de reuniones (Google Calendar)
+
+El botón **Agendar diagnóstico** abre un modal con la página de reservas de Google Calendar, con pestañas **Videollamada** y **Presencial**.
+
+1. En Google Calendar: **Crear → Agenda de citas**, una para videollamada (Google Meet) y otra presencial.
+2. En cada una: **Compartir → Insertar en el sitio web → En línea** y copia la URL del `src` (termina en `?gv=true`).
+3. Pégalas en `lib/manifest.js` → `booking.virtualUrl` y `booking.presencialUrl`.
+
+Sin enlaces configurados, los botones llevan al formulario con la modalidad ya marcada.
 
 ## Ver en local
 
