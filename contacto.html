@@ -29,10 +29,9 @@
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<!-- Tipografías -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<!-- Tipografías (alojadas en el sitio) -->
+<link rel="preload" href="assets/fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css?v=20260925">
 <script src="lib/boot.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://fuseconsultora.com/#org","name":"FUSE","alternateName":"FUSE Consultoría de Marketing","slogan":"Conecta. Activa. Escala.","description":"Consultoría de marketing para PyMEs y negocios locales: estrategia de marca, redes sociales, publicidad paga, SEO local y analítica.","url":"https://fuseconsultora.com/","logo":"https://fuseconsultora.com/assets/apple-touch-icon.png","image":"https://fuseconsultora.com/assets/img/og-image.png","email":"hola@fuseconsultora.com","sameAs":["https://www.instagram.com/fuse_plus/"],"knowsAbout":["Estrategia de marca","Branding","Redes sociales","Publicidad en Meta Ads","Google Ads","SEO local","Analítica web"]}</script>
@@ -104,6 +103,11 @@
           <span class="pillar-link">Ver horarios disponibles <span class="arrow" aria-hidden="true">→</span></span>
         </a>
       </div>
+      <a class="meet-wa" href="#form" data-wa-book target="_blank" rel="noopener" hidden data-reveal>
+        <span class="meet-wa-ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.34-2.92c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42h-.47a.9.9 0 0 0-.66.31 2.77 2.77 0 0 0-.86 2.06 4.8 4.8 0 0 0 1 2.55c.13.16 1.76 2.7 4.28 3.78 1.6.69 2.22.75 3.02.63.49-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></span>
+        <span><strong>¿Prefieres coordinar por WhatsApp?</strong> Escríbenos y acordamos día, hora y modalidad. Ideal si tu conexión es inestable.</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
       <p class="meet-fallback" data-booking-fallback>Si prefieres, déjanos tus datos en el formulario y te proponemos día y hora por correo o WhatsApp.</p>
     </div>
   </section>
@@ -316,7 +320,7 @@
   </div>
   <p class="booking-note" data-booking-note></p>
   <div class="booking-frame"><div class="booking-loading" aria-hidden="true"><span class="spinner"></span></div></div>
-  <p class="booking-alt">¿No carga el calendario? <a href="#" target="_blank" rel="noopener" data-booking-newtab>Ábrelo en una pestaña nueva</a> · ¿Prefieres escribirnos? <a href="contacto.html#form" data-booking-close>Usa el formulario</a>.</p>
+  <p class="booking-alt">¿No carga el calendario? <a href="#" target="_blank" rel="noopener" data-booking-newtab>Ábrelo en una pestaña nueva</a><span data-wa-book-wrap hidden> · <a href="#" target="_blank" rel="noopener" data-wa-book>Coordina por WhatsApp</a></span> · <a href="contacto.html#form" data-booking-close>Usa el formulario</a>.</p>
 </dialog>
 
 <div class="fab-stack">

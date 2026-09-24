@@ -19,10 +19,11 @@
   }
 
   /* ---------- Datos de marca: rellena [data-brand] desde lib/manifest.js ---------- */
-  function waLink() {
+  function waLink(message) {
     if (!contact.whatsapp) return "";
+    var text = message || contact.whatsappMessage;
     return "https://wa.me/" + String(contact.whatsapp).replace(/\D/g, "") +
-      (contact.whatsappMessage ? "?text=" + encodeURIComponent(contact.whatsappMessage) : "");
+      (text ? "?text=" + encodeURIComponent(text) : "");
   }
   function mountBrand() {
     var values = {
@@ -493,6 +494,14 @@
 
   /* ---------- Botón flotante de WhatsApp ---------- */
   function initWhatsApp() {
+    // Enlaces "coordinar por WhatsApp" de la agenda
+    var bookLink = waLink(contact.whatsappBookingMessage);
+    $$("[data-wa-book]").forEach(function (a) {
+      var wrap = a.closest("[data-wa-book-wrap]") || a;
+      if (!bookLink) { wrap.hidden = true; return; }
+      a.setAttribute("href", bookLink);
+      wrap.hidden = false;
+    });
     var fab = $("[data-wa-fab]");
     if (!fab) return;
     var link = waLink();

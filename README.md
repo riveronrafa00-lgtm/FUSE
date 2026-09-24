@@ -26,7 +26,7 @@ main.js                    toda la interactividad
 lib/manifest.js            ⭐ datos de contacto y redes (edita AQUÍ)
 lib/boot.js                evita parpadeos al cargar
 functions/api/contact.js   Cloudflare Pages Function: recibe el formulario y envía el correo
-assets/                    logo, favicon, íconos PNG, imagen para redes (og-image.png)
+assets/                    logo, favicon, íconos PNG, og-image.png y tipografías (assets/fonts)
 _headers                   cabeceras de seguridad y caché (Cloudflare)
 _redirects                 redirecciones cortas (/contact, /precios, /instagram…)
 robots.txt, sitemap.xml    SEO
