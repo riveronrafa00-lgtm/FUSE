@@ -232,23 +232,23 @@
     base: {
       name: "Fusión Base",
       value: "Fusión Base",
-      badge: "Arranque",
-      text: "Primero hay que ordenar la casa: entender tu mercado, definir qué te hace distinto y salir a redes con un mensaje claro.",
-      items: ["Diagnóstico de marca y mercado", "Estrategia de marca y tono de voz", "Redes sociales básicas"]
+      badge: "Arranque · alcance fijo",
+      text: "Primero hay que ordenar la casa: diagnosticar tu marca, definir qué te hace distinto y salir con un mensaje claro.",
+      items: ["Diagnóstico FUSE", "Estrategia de marca", "Redes sociales básicas y propuesta de continuidad"]
     },
     activa: {
       name: "Fusión Activa",
       value: "Fusión Activa",
-      badge: "Retainer mensual",
-      text: "Ya tienes una base: lo que te falta es constancia y canales que traigan clientes todos los meses.",
-      items: ["Todo lo de Fusión Base", "Publicidad paga en Meta y Google", "Contenido y SEO local"]
+      badge: "Retainer mensual · ejecución 360",
+      text: "Ya tienes una base: lo que te falta es constancia y campañas que traigan clientes todos los meses, en canales digitales y tradicionales.",
+      items: ["Redes, contenido, email marketing y pauta en Meta y Google", "SEO local, medios locales, POP y activaciones", "Fotografía, video y reporte mensual de resultados"]
     },
     total: {
       name: "Fusión Total",
       value: "Fusión Total",
-      badge: "Retainer premium",
-      text: "Tu negocio ya tiene tracción. Toca medir, optimizar la conversión y decidir el siguiente canal con datos.",
-      items: ["Todo lo de Fusión Activa", "Analítica y reportería mensual", "Optimización de conversión y acompañamiento estratégico"]
+      badge: "Retainer premium · ejecución + crecimiento",
+      text: "Tu empresa ya tiene tracción. Toca medir, optimizar la conversión y decidir el siguiente canal, sede o mercado con datos.",
+      items: ["Todo lo de Fusión Activa", "Analítica avanzada y optimización de conversión", "Consultoría de crecimiento y revisión trimestral"]
     }
   };
   function initQuiz() {
@@ -507,6 +507,12 @@
 
   /* ---------- Botón flotante de WhatsApp ---------- */
   function initWhatsApp() {
+    // Botones "WhatsApp" de los llamados finales
+    var generic = waLink();
+    $$("[data-wa-link]").forEach(function (a) {
+      if (!generic) { a.hidden = true; return; }
+      a.setAttribute("href", generic); a.hidden = false;
+    });
     // Enlaces "coordinar por WhatsApp" de la agenda
     var bookLink = waLink(contact.whatsappBookingMessage);
     $$("[data-wa-book]").forEach(function (a) {

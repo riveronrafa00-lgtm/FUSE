@@ -1,6 +1,6 @@
 # FUSE — sitio web
 
-Consultoría de marketing para PyMEs y negocios locales. *Conecta. Activa. Escala.*
+Agencia de marketing 360 para empresas y negocios de todos los tamaños. *Conecta. Activa. Escala.*
 
 Sitio estático (HTML + CSS + JavaScript sin frameworks) listo para **Cloudflare Pages**, con el código respaldado en **GitHub**. Cada `git push` a `main` publica una versión nueva automáticamente.
 
@@ -60,7 +60,7 @@ Opcional: vincula un namespace KV como `CONTACT_KV` para guardar copia de cada m
 
 ## Agenda de reuniones (Google Calendar)
 
-El botón **Agendar diagnóstico** abre un modal con la página de reservas de Google Calendar, con pestañas **Videollamada** y **Presencial**.
+En Contacto, las tarjetas **Videollamada** y **Presencial** abren un modal con la página de reservas de Google Calendar. El llamado principal del sitio es **Contáctanos**.
 
 1. En Google Calendar: **Crear → Agenda de citas**, una para videollamada (Google Meet) y otra presencial.
 2. En cada una: **Compartir → Insertar en el sitio web → En línea** y copia la URL del `src` (termina en `?gv=true`).
@@ -87,5 +87,5 @@ node scripts/check-site.mjs          # revisar enlaces
 - Email del sitio: hoy vacío a propósito; se activa poniendo `contact.email` en el manifest y `CONTACT_TO` en Cloudflare.
 - Confirmar el dominio: hoy las URLs canónicas, `sitemap.xml` y `robots.txt` usan `https://fuseconsultora.com`.
 - Testimonios: sección oculta (`hidden` en `index.html`) hasta tener reseñas reales.
-- Logo en alta resolución (hoy es una recreación SVG en `assets/img/logo-mark.svg`).
+- Logo: se usa el imagotipo oficial (`assets/img/fuse-logo.webp`, `fuse-imagotipo.webp`, `fuse-simbolo.webp`). Si llega el archivo vectorial (SVG/AI), conviene reemplazarlos.
 - Revisión legal de la política de privacidad.
