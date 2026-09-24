@@ -35,7 +35,7 @@
 <link rel="preload" as="image" href="assets/img/logo-mark.svg">
 <link rel="stylesheet" href="styles.css?v=20260925">
 <script src="lib/boot.js"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://fuseconsultora.com/#org","name":"FUSE","alternateName":"FUSE Consultoría de Marketing","slogan":"Conecta. Activa. Escala.","description":"Consultoría de marketing para PyMEs y negocios locales: estrategia de marca, redes sociales, publicidad paga, SEO local y analítica.","url":"https://fuseconsultora.com/","logo":"https://fuseconsultora.com/assets/apple-touch-icon.png","image":"https://fuseconsultora.com/assets/img/og-image.png","email":"hola@fuseconsultora.com","sameAs":["https://www.instagram.com/fuse_plus/"],"knowsAbout":["Estrategia de marca","Branding","Redes sociales","Publicidad en Meta Ads","Google Ads","SEO local","Analítica web"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://fuseconsultora.com/#org","name":"FUSE","alternateName":"FUSE Consultoría de Marketing","slogan":"Conecta. Activa. Escala.","description":"Consultoría de marketing para PyMEs y negocios locales: estrategia de marca, redes sociales, publicidad paga, SEO local y analítica.","url":"https://fuseconsultora.com/","logo":"https://fuseconsultora.com/assets/apple-touch-icon.png","image":"https://fuseconsultora.com/assets/img/og-image.png","contactPoint":{"@type":"ContactPoint","contactType":"customer service","telephone":"+5351529640","availableLanguage":["es"]},"sameAs":["https://www.instagram.com/fuse_plus/"],"knowsAbout":["Estrategia de marca","Branding","Redes sociales","Publicidad en Meta Ads","Google Ads","SEO local","Analítica web"]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"FUSE","url":"https://fuseconsultora.com/","inLanguage":"es"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Con qué tipo de negocios trabaja FUSE?","acceptedAnswer":{"@type":"Answer","text":"Con PyMEs y negocios locales: comercios, restaurantes, clínicas, estudios profesionales, servicios a domicilio y marcas que están creciendo. Si tu negocio atiende a clientes de una ciudad o región, hablamos tu idioma."}},{"@type":"Question","name":"¿Tengo que firmar un contrato largo?","acceptedAnswer":{"@type":"Answer","text":"No. Puedes empezar con un proyecto puntual (por ejemplo, un diagnóstico o una estrategia de marca) y, si te sirve, pasar a un plan mensual. Los retainers son mes a mes."}},{"@type":"Question","name":"¿Cuánto cuesta trabajar con FUSE?","acceptedAnswer":{"@type":"Answer","text":"Cada propuesta se cotiza según el alcance real de tu negocio. Tras una primera conversación sin costo te enviamos una propuesta clara, con entregables y precio cerrado."}},{"@type":"Question","name":"¿La inversión en publicidad está incluida?","acceptedAnswer":{"@type":"Answer","text":"No. La gestión de campañas es parte del servicio; el presupuesto que se invierte en Meta o Google se paga aparte y directamente a la plataforma, así siempre sabes cuánto se invierte y dónde."}},{"@type":"Question","name":"¿En cuánto tiempo veré resultados?","acceptedAnswer":{"@type":"Answer","text":"Depende del canal. La publicidad paga puede generar contactos en semanas; el SEO local y el contenido construyen resultados en 3 a 6 meses. Desde el primer mes te mostramos qué medimos y cómo avanza."}},{"@type":"Question","name":"¿Trabajan de forma remota?","acceptedAnswer":{"@type":"Answer","text":"Sí. Coordinamos por videollamada, WhatsApp y correo, así que podemos acompañarte estés donde estés."}}]}</script>
 </head>
@@ -286,7 +286,8 @@
   </section>
 
   <!-- TESTIMONIOS -->
-  <section class="section section-soft" id="testimonios">
+  <!-- Oculta hasta tener reseñas reales: para mostrarla, borra el atributo "hidden" de la línea siguiente -->
+  <section class="section section-soft" id="testimonios" hidden>
     <div class="container">
       <div class="section-head" data-reveal>
         <span class="eyebrow is-violet">Testimonios</span>
@@ -432,7 +433,7 @@
       <div class="footer-col">
         <h2>Contacto</h2>
         <ul>
-          <li data-brand-wrap><a href="mailto:hola@fuseconsultora.com" data-brand="email">hola@fuseconsultora.com</a></li>
+          <li data-brand-wrap hidden><a href="#" data-brand="email"></a></li>
           <li data-brand-wrap hidden><a href="#" data-brand="phone"></a></li>
           <li data-brand-wrap hidden><a href="#" target="_blank" rel="noopener" data-brand="whatsapp"></a></li>
           <li data-brand-wrap hidden><p data-brand="city"></p></li>

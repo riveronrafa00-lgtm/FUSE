@@ -49,14 +49,14 @@ wrangler.toml.example      config opcional para pruebas locales con Wrangler
 | Variable | Tipo | Ejemplo |
 |---|---|---|
 | `RESEND_API_KEY` | Secreto | `re_…` (cuenta gratuita en resend.com) |
-| `CONTACT_TO` | Texto | `hola@fuseconsultora.com` |
+| `CONTACT_TO` | Texto (obligatoria) | `hola@fuseconsultora.com` |
 | `CONTACT_FROM` | Texto | `FUSE Web <web@fuseconsultora.com>` (dominio verificado en Resend) |
 | `TURNSTILE_SECRET_KEY` | Secreto, opcional | clave secreta de Turnstile |
 | `ALLOWED_ORIGINS` | Texto, opcional | `https://fuseconsultora.com,https://www.fuseconsultora.com` |
 
 Opcional: vincula un namespace KV como `CONTACT_KV` para guardar copia de cada mensaje y limitar a 5 envíos por hora por IP.
 
-**Sin configurar nada**, el formulario sigue funcionando: abre el programa de correo del visitante con el mensaje redactado.
+**Sin configurar nada**, el formulario sigue funcionando: abre WhatsApp con el mensaje redactado (o el correo, si hay `contact.email` en el manifest).
 
 ## Agenda de reuniones (Google Calendar)
 
@@ -84,8 +84,8 @@ node scripts/check-site.mjs          # revisar enlaces
 
 ## Pendientes antes de lanzar
 
-- Datos reales en `lib/manifest.js` (teléfono, WhatsApp, ciudad, LinkedIn).
+- Email del sitio: hoy vacío a propósito; se activa poniendo `contact.email` en el manifest y `CONTACT_TO` en Cloudflare.
 - Confirmar el dominio: hoy las URLs canónicas, `sitemap.xml` y `robots.txt` usan `https://fuseconsultora.com`.
-- Reemplazar los 3 testimonios de ejemplo por reseñas reales.
+- Testimonios: sección oculta (`hidden` en `index.html`) hasta tener reseñas reales.
 - Logo en alta resolución (hoy es una recreación SVG en `assets/img/logo-mark.svg`).
 - Revisión legal de la política de privacidad.

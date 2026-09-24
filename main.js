@@ -346,10 +346,10 @@
       status.innerHTML = html;
     }
 
+    // Plan B cuando el servidor de formularios no está configurado:
+    // 1) correo del visitante si hay email en manifest; 2) si no, WhatsApp.
     function mailtoFallback(fd) {
-      var to = contact.email || "hola@fuseconsultora.com";
-      var subject = "Contacto desde la web — " + (fd.get("nombre") || "");
-      var body = [
+      var lines = [
         "Nombre: " + (fd.get("nombre") || ""),
         "Empresa: " + (fd.get("empresa") || "(no indicada)"),
         "Email: " + (fd.get("email") || ""),
@@ -360,9 +360,23 @@
         "",
         "Mensaje:",
         fd.get("mensaje") || ""
-      ].join("\n");
-      window.location.href = "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      setStatus("info", "Abrimos tu programa de correo con el mensaje listo para enviar. Si no se abrió, escríbenos a <a href=\"mailto:" + to + "\">" + to + "</a>.");
+      ];
+      var to = contact.email;
+      if (to) {
+        var subject = "Contacto desde la web — " + (fd.get("nombre") || "");
+        window.location.href = "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(lines.join("\n"));
+        setStatus("info", "Abrimos tu programa de correo con el mensaje listo para enviar. Si no se abrió, escríbenos a <a href=\"mailto:" + to + "\">" + to + "</a>.");
+        return;
+      }
+      var wa = waLink("Hola FUSE, les escribo desde la web.\n\n" + lines.join("\n"));
+      if (wa) {
+        // Si el navegador bloquea la ventana nueva, abrimos WhatsApp en esta misma pestaña
+        var win = window.open(wa, "_blank");
+        if (win) { try { win.opener = null; } catch (_) {} } else { window.location.href = wa; }
+        setStatus("info", "Abrimos WhatsApp con tu mensaje listo: solo pulsa <strong>Enviar</strong>. Si no se abrió, <a href=\"" + wa + "\" target=\"_blank\" rel=\"noopener\">haz clic aquí</a>.");
+        return;
+      }
+      setStatus("error", "No pudimos enviar tu mensaje en este momento. Inténtalo de nuevo más tarde.");
     }
 
     form.addEventListener("submit", function (e) {

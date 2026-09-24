@@ -68,7 +68,7 @@ async function sendEmail(env, d, meta) {
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       from: env.CONTACT_FROM || "FUSE Web <onboarding@resend.dev>",
-      to: (env.CONTACT_TO || "hola@fuseconsultora.com").split(",").map((s) => s.trim()),
+      to: env.CONTACT_TO.split(",").map((s) => s.trim()),
       reply_to: d.email,
       subject: `Nuevo contacto: ${d.nombre}${d.servicio ? " · " + d.servicio : ""}`,
       html,
@@ -121,7 +121,7 @@ export async function onRequestPost({ request, env }) {
     }
   }
 
-  const hasEmail = Boolean(env.RESEND_API_KEY);
+  const hasEmail = Boolean(env.RESEND_API_KEY && env.CONTACT_TO);
   const hasKV = Boolean(env.CONTACT_KV);
   if (!hasEmail && !hasKV) return json({ ok: false, error: "Formulario no configurado todavía." }, 503);
 
