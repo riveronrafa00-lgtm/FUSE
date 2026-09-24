@@ -28,7 +28,7 @@
     var values = {
       email: contact.email ? { text: contact.email, href: "mailto:" + contact.email } : null,
       phone: contact.phone ? { text: contact.phone, href: "tel:" + contact.phone.replace(/[^\d+]/g, "") } : null,
-      whatsapp: contact.whatsapp ? { text: contact.phone || "WhatsApp", href: waLink() } : null,
+      whatsapp: contact.whatsapp ? { text: contact.whatsappLabel || contact.phone || "WhatsApp", href: waLink() } : null,
       city: contact.city ? { text: contact.city } : null,
       hours: contact.hours ? { text: contact.hours } : null,
       meetAddress: contact.meetAddress ? { text: contact.meetAddress } : null,
