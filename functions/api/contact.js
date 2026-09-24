@@ -16,7 +16,7 @@
    abre el correo del visitante (mailto) como plan B: el sitio nunca queda sin contacto.
    ============================================================= */
 
-const MAX = { nombre: 100, empresa: 120, email: 160, telefono: 30, servicio: 80, modalidad: 30, presupuesto: 40, mensaje: 2000 };
+const MAX = { nombre: 100, empresa: 120, email: 160, telefono: 30, servicio: 80, modalidad: 30, mensaje: 2000 };
 const RATE_LIMIT = 5;          // envíos por IP…
 const RATE_WINDOW = 60 * 60;   // …por hora
 
@@ -50,7 +50,7 @@ async function verifyTurnstile(secret, token, ip) {
 async function sendEmail(env, d, meta) {
   const rows = [
     ["Nombre", d.nombre], ["Negocio", d.empresa || "—"], ["Email", d.email],
-    ["Teléfono", d.telefono || "—"], ["Servicio", d.servicio || "—"], ["Modalidad", d.modalidad || "—"], ["Presupuesto", d.presupuesto || "—"],
+    ["Teléfono", d.telefono || "—"], ["Servicio", d.servicio || "—"], ["Modalidad", d.modalidad || "—"],
   ];
   const html = `<div style="font-family:Arial,sans-serif;max-width:600px">
     <h2 style="color:#0057FF;margin:0 0 12px">Nuevo contacto desde la web</h2>

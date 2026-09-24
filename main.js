@@ -356,7 +356,6 @@
         "Teléfono: " + (fd.get("telefono") || "(no indicado)"),
         "Servicio de interés: " + (fd.get("servicio") || "(no indicado)"),
         "Modalidad de reunión: " + (fd.get("modalidad") || "(no indicada)"),
-        "Presupuesto mensual: " + (fd.get("presupuesto") || "(no indicado)"),
         "",
         "Mensaje:",
         fd.get("mensaje") || ""
