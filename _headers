@@ -35,8 +35,8 @@
   Content-Type: application/manifest+json
   Cache-Control: public, max-age=86400
 
-# La previsualización *.pages.dev no debe indexarse (solo el dominio propio)
-https://:project.pages.dev/*
-  X-Robots-Tag: noindex
+# Las vistas previas de cada despliegue (xxxx.fuseagencia.pages.dev) no deben indexarse.
+# La dirección principal (fuseagencia.pages.dev) sí se indexa. Cuando conectes un dominio
+# propio, añade también aquí:  https://:project.pages.dev/*  →  X-Robots-Tag: noindex
 https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex

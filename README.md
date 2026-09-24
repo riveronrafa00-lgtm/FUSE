@@ -85,7 +85,7 @@ node scripts/check-site.mjs          # revisar enlaces
 ## Pendientes antes de lanzar
 
 - Email del sitio: hoy vacío a propósito; se activa poniendo `contact.email` en el manifest y `CONTACT_TO` en Cloudflare.
-- Confirmar el dominio: hoy las URLs canónicas, `sitemap.xml` y `robots.txt` usan `https://fuseconsultora.com`.
+- Dirección actual: `https://fuseagencia.pages.dev` (URLs canónicas, `sitemap.xml` y `robots.txt`). Si se conecta un dominio propio (ej. `fuseagencia.eu.org`), cambiar `SITE` en esas etiquetas y añadir el `noindex` de `*.pages.dev` en `_headers`.
 - Testimonios: sección oculta (`hidden` en `index.html`) hasta tener reseñas reales.
 - Logo: se usa el imagotipo oficial (`assets/img/fuse-logo.webp`, `fuse-imagotipo.webp`, `fuse-simbolo.webp`). Si llega el archivo vectorial (SVG/AI), conviene reemplazarlos.
 - Revisión legal de la política de privacidad.
