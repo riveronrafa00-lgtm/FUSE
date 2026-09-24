@@ -1,0 +1,14 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+
+# Cloudflare / Node
+node_modules/
+.wrangler/
+.dev.vars
+.env
+dist/

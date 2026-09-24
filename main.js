@@ -1,7 +1,13 @@
+/* =============================================================
+   FUSE — main.js (JavaScript sin dependencias)
+   Cada módulo corre aislado con safe(): si uno falla, el resto sigue.
+   ============================================================= */
 (function () {
   "use strict";
 
   var data = window.__BRAND__ || {};
+  var contact = data.contact || {};
+  var formCfg = data.form || {};
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fineHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
@@ -12,24 +18,79 @@
     try { fn(); } catch (e) { console.warn("[" + name + "]", e); }
   }
 
-  /* ---------- Nav: menú móvil ---------- */
+  /* ---------- Datos de marca: rellena [data-brand] desde lib/manifest.js ---------- */
+  function waLink() {
+    if (!contact.whatsapp) return "";
+    return "https://wa.me/" + String(contact.whatsapp).replace(/\D/g, "") +
+      (contact.whatsappMessage ? "?text=" + encodeURIComponent(contact.whatsappMessage) : "");
+  }
+  function mountBrand() {
+    var values = {
+      email: contact.email ? { text: contact.email, href: "mailto:" + contact.email } : null,
+      phone: contact.phone ? { text: contact.phone, href: "tel:" + contact.phone.replace(/[^\d+]/g, "") } : null,
+      whatsapp: contact.whatsapp ? { text: contact.phone || "WhatsApp", href: waLink() } : null,
+      city: contact.city ? { text: contact.city } : null,
+      hours: contact.hours ? { text: contact.hours } : null,
+      instagram: contact.instagram ? { href: contact.instagram } : null,
+      linkedin: contact.linkedin ? { href: contact.linkedin } : null,
+      facebook: contact.facebook ? { href: contact.facebook } : null,
+      tiktok: contact.tiktok ? { href: contact.tiktok } : null
+    };
+    $$("[data-brand]").forEach(function (el) {
+      var key = el.getAttribute("data-brand");
+      var v = values[key];
+      // El contenedor a ocultar si no hay dato (ej. el <li> o el bloque completo)
+      var wrap = el.closest("[data-brand-wrap]") || el;
+      if (!v) { wrap.hidden = true; return; }
+      wrap.hidden = false;
+      if (v.text && !el.hasAttribute("data-brand-keep-text")) el.textContent = v.text;
+      if (v.href && el.tagName === "A") el.setAttribute("href", v.href);
+    });
+  }
+
+  /* ---------- Nav: estado al hacer scroll + barra de progreso ---------- */
+  function initScrollUI() {
+    var nav = $(".nav");
+    var bar = $("[data-progress]");
+    var top = $("[data-to-top]");
+    var ticking = false;
+    function update() {
+      var y = window.scrollY;
+      var max = document.documentElement.scrollHeight - innerHeight;
+      if (nav) nav.classList.toggle("is-scrolled", y > 12);
+      if (bar) bar.style.setProperty("--p", max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
+      if (top) top.classList.toggle("is-visible", y > innerHeight * 0.9);
+      ticking = false;
+    }
+    addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+    if (top) top.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    });
+  }
+
+  /* ---------- Nav: menú móvil (Esc para cerrar, bloqueo de scroll) ---------- */
   function initNav() {
     var toggle = $("[data-nav-toggle]");
     var mobile = $("[data-nav-mobile]");
     if (!toggle || !mobile) return;
+    function setOpen(open) {
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+      mobile.classList.toggle("is-open", open);
+      document.body.classList.toggle("is-locked", open);
+      if (open) { var first = $("a", mobile); if (first) first.focus({ preventScroll: true }); }
+    }
     toggle.addEventListener("click", function () {
-      var open = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!open));
-      mobile.classList.toggle("is-open", !open);
-      document.body.style.overflow = !open ? "hidden" : "";
+      setOpen(toggle.getAttribute("aria-expanded") !== "true");
     });
-    $$("a", mobile).forEach(function (a) {
-      a.addEventListener("click", function () {
-        toggle.setAttribute("aria-expanded", "false");
-        mobile.classList.remove("is-open");
-        document.body.style.overflow = "";
-      });
+    $$("a", mobile).forEach(function (a) { a.addEventListener("click", function () { setOpen(false); }); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && mobile.classList.contains("is-open")) { setOpen(false); toggle.focus(); }
     });
+    matchMedia("(min-width: 960px)").addEventListener("change", function (e) { if (e.matches) setOpen(false); });
   }
 
   /* ---------- Hero: gradiente reactivo al cursor ---------- */
@@ -49,11 +110,25 @@
     });
   }
 
-  /* ---------- Reveal on scroll ---------- */
+  /* ---------- Slogan: Conecta → Activa → Escala se encienden en secuencia ---------- */
+  function initSlogan() {
+    var words = $$("[data-slogan] span");
+    if (!words.length) return;
+    if (reduced) { words.forEach(function (w) { w.classList.add("is-on"); }); return; }
+    var i = 0;
+    function step() {
+      words.forEach(function (w, k) { w.classList.toggle("is-on", k <= i); });
+      i = (i + 1) % (words.length + 1);
+      setTimeout(step, i === 0 ? 2200 : 900);
+    }
+    setTimeout(step, 600);
+  }
+
+  /* ---------- Aparición al hacer scroll ---------- */
   function initReveals() {
     var els = $$("[data-reveal]");
     if (!els.length) return;
-    if (!("IntersectionObserver" in window)) {
+    if (!("IntersectionObserver" in window) || reduced) {
       els.forEach(function (el) { el.classList.add("is-visible"); });
       return;
     }
@@ -64,110 +139,290 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.01, rootMargin: "0px 0px -2% 0px" });
-    els.forEach(function (el, i) {
-      el.style.setProperty("--i", i % 6);
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    // Escalonado: los hermanos dentro del mismo contenedor entran uno tras otro
+    els.forEach(function (el) {
+      var siblings = el.parentElement ? $$(":scope > [data-reveal]", el.parentElement) : [el];
+      el.style.setProperty("--i", Math.max(0, siblings.indexOf(el)) % 6);
       io.observe(el);
     });
+    // Red de seguridad: nada queda invisible si el observer no dispara
     setTimeout(function () {
       els.forEach(function (el) {
-        if (!el.classList.contains("is-visible") && el.getBoundingClientRect().top < innerHeight) {
-          el.classList.add("is-visible");
-        }
+        if (el.getBoundingClientRect().top < innerHeight) el.classList.add("is-visible");
       });
-    }, 6000);
+    }, 2500);
   }
 
-  /* ---------- Botones magnéticos (sutil) ---------- */
-  function initMagnetic() {
+  /* ---------- Contadores animados ---------- */
+  function initCounters() {
+    var els = $$("[data-count]");
+    if (!els.length || !("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        var el = entry.target;
+        var end = parseInt(el.getAttribute("data-count"), 10) || 0;
+        if (reduced) { el.textContent = end; return; }
+        var t0 = null, dur = 1400;
+        function frame(t) {
+          if (!t0) t0 = t;
+          var p = Math.min(1, (t - t0) / dur);
+          el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Botones magnéticos + spotlight en tarjetas ---------- */
+  function initPointerFx() {
     if (!fineHover || reduced) return;
     $$("[data-magnetic]").forEach(function (btn) {
       btn.addEventListener("mousemove", function (e) {
         var rect = btn.getBoundingClientRect();
         var x = e.clientX - rect.left - rect.width / 2;
         var y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = "translate(" + (x * 0.18) + "px," + (y * 0.32) + "px)";
+        btn.style.transform = "translate(" + (x * 0.16) + "px," + (y * 0.28) + "px)";
       });
-      btn.addEventListener("mouseout", function (e) {
-        if (btn.contains(e.relatedTarget)) return;
-        btn.style.transform = "";
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+    });
+    $$("[data-spotlight]").forEach(function (card) {
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--sx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--sy", (e.clientY - r.top) + "px");
       });
     });
   }
 
-  /* ---------- Scroll suave para anclas ---------- */
-  function initAnchorScroll() {
-    document.addEventListener("click", function (e) {
-      var a = e.target.closest('a[href^="#"]');
-      if (!a) return;
-      var id = a.getAttribute("href");
-      if (!id || id === "#") return;
-      var el = document.querySelector(id);
-      if (!el) return;
-      e.preventDefault();
-      var navOffset = 92;
-      window.scrollTo({
-        top: el.getBoundingClientRect().top + window.scrollY - navOffset,
-        behavior: reduced ? "auto" : "smooth"
+  /* ---------- Sub-navegación de servicios: resalta la sección visible ---------- */
+  function initScrollSpy() {
+    var links = $$("[data-subnav] a[href^='#']");
+    if (!links.length || !("IntersectionObserver" in window)) return;
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        links.forEach(function (a) { a.classList.remove("is-active"); });
+        var a = map[entry.target.id];
+        if (a) {
+          a.classList.add("is-active");
+          // Desplaza solo la barra (horizontal), nunca la página
+          var bar = a.parentElement;
+          bar.scrollLeft = a.offsetLeft - (bar.clientWidth - a.offsetWidth) / 2;
+        }
       });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    Object.keys(map).forEach(function (id) { var s = document.getElementById(id); if (s) io.observe(s); });
+  }
+
+  /* ---------- Recomendador "¿Por dónde empiezo?" ---------- */
+  var PACKAGES = {
+    base: {
+      name: "Fusión Base",
+      value: "Fusión Base",
+      badge: "Arranque",
+      text: "Primero hay que ordenar la casa: entender tu mercado, definir qué te hace distinto y salir a redes con un mensaje claro.",
+      items: ["Diagnóstico de marca y mercado", "Estrategia de marca y tono de voz", "Redes sociales básicas"]
+    },
+    activa: {
+      name: "Fusión Activa",
+      value: "Fusión Activa",
+      badge: "Retainer mensual",
+      text: "Ya tienes una base: lo que te falta es constancia y canales que traigan clientes todos los meses.",
+      items: ["Todo lo de Fusión Base", "Publicidad paga en Meta y Google", "Contenido y SEO local"]
+    },
+    total: {
+      name: "Fusión Total",
+      value: "Fusión Total",
+      badge: "Retainer premium",
+      text: "Tu negocio ya tiene tracción. Toca medir, optimizar la conversión y decidir el siguiente canal con datos.",
+      items: ["Todo lo de Fusión Activa", "Analítica y reportería mensual", "Optimización de conversión y acompañamiento estratégico"]
+    }
+  };
+  function initQuiz() {
+    var quiz = $("[data-quiz]");
+    if (!quiz) return;
+    var steps = $$("[data-quiz-step]", quiz);
+    var bars = $$(".quiz-progress i", quiz);
+    var result = $("[data-quiz-result]", quiz);
+    var score, current;
+    function show(i) {
+      current = i;
+      steps.forEach(function (s, k) { s.classList.toggle("is-active", k === i); });
+      bars.forEach(function (b, k) { b.classList.toggle("is-done", k < i || (i === -1)); });
+      result.classList.toggle("is-active", i === -1);
+    }
+    function reset() { score = { base: 0, activa: 0, total: 0 }; show(0); }
+    quiz.addEventListener("click", function (e) {
+      var opt = e.target.closest("[data-pick]");
+      if (opt) {
+        score[opt.getAttribute("data-pick")] += 1;
+        if (current + 1 < steps.length) { show(current + 1); $(".quiz-option", steps[current]).focus({ preventScroll: true }); return; }
+        var best = "activa";
+        ["base", "activa", "total"].forEach(function (k) { if (score[k] > score[best]) best = k; });
+        var p = PACKAGES[best];
+        $("[data-quiz-name]", result).textContent = p.name;
+        $("[data-quiz-badge]", result).textContent = p.badge;
+        $("[data-quiz-text]", result).textContent = p.text;
+        var ul = $("[data-quiz-items]", result);
+        ul.innerHTML = "";
+        p.items.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+        $("[data-quiz-cta]", result).setAttribute("href", "contacto.html?servicio=" + encodeURIComponent(p.value) + "#form");
+        show(-1);
+        $("[data-quiz-name]", result).focus({ preventScroll: true });
+      }
+      if (e.target.closest("[data-quiz-reset]")) reset();
     });
+    reset();
   }
 
   /* ---------- Formulario de contacto ---------- */
+  function loadTurnstile(slot) {
+    if (!formCfg.turnstileSiteKey || !slot) return;
+    slot.innerHTML = '<div class="cf-turnstile" data-sitekey="' + formCfg.turnstileSiteKey + '" data-theme="dark" data-language="es"></div>';
+    var s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  }
+
   function initContactForm() {
     var form = $("[data-contact-form]");
     if (!form) return;
-    var success = $("[data-form-success]", form.parentElement) || $("[data-form-success]");
+    var status = $("[data-form-status]", form);
+    var btn = $("button[type=submit]", form);
+    var msg = $("#mensaje", form);
+    var counter = $("[data-count-for]", form);
 
-    form.addEventListener("submit", function (e) {
-      if (!form.reportValidity()) return;
-      e.preventDefault();
+    // Preselecciona el servicio si viene en la URL (?servicio=Fusión Activa)
+    var pre = new URLSearchParams(location.search).get("servicio");
+    var sel = $("#servicio", form);
+    if (pre && sel) {
+      $$("option", sel).forEach(function (o) { if (o.value === pre) sel.value = pre; });
+    }
 
-      var name = $('[name="nombre"]', form);
-      var email = $('[name="email"]', form);
-      var phone = $('[name="telefono"]', form);
-      var service = $('[name="servicio"]', form);
-      var message = $('[name="mensaje"]', form);
+    if (msg && counter) {
+      var max = parseInt(msg.getAttribute("maxlength"), 10) || 2000;
+      var upd = function () { counter.textContent = msg.value.length + " / " + max; };
+      msg.addEventListener("input", upd); upd();
+    }
 
-      var subject = "Contacto desde la web — " + (name ? name.value : "");
+    loadTurnstile($("[data-turnstile]", form));
+
+    // Validación en línea, amable: solo marca errores tras salir del campo
+    $$("input, select, textarea", form).forEach(function (f) {
+      f.addEventListener("blur", function () { validateField(f); });
+      f.addEventListener("input", function () { if (f.closest(".field.is-invalid")) validateField(f); });
+    });
+    function validateField(f) {
+      var wrap = f.closest(".field");
+      if (!wrap || f.type === "checkbox") return true;
+      var ok = f.checkValidity();
+      wrap.classList.toggle("is-invalid", !ok);
+      f.setAttribute("aria-invalid", String(!ok));
+      return ok;
+    }
+
+    function setStatus(kind, html) {
+      status.className = "form-status is-visible is-" + kind;
+      status.innerHTML = html;
+    }
+
+    function mailtoFallback(fd) {
+      var to = contact.email || "hola@fuseconsultora.com";
+      var subject = "Contacto desde la web — " + (fd.get("nombre") || "");
       var body = [
-        "Nombre: " + (name ? name.value : ""),
-        "Email: " + (email ? email.value : ""),
-        "Teléfono: " + (phone ? phone.value : "(no indicado)"),
-        "Servicio de interés: " + (service ? service.value : "(no indicado)"),
+        "Nombre: " + (fd.get("nombre") || ""),
+        "Empresa: " + (fd.get("empresa") || "(no indicada)"),
+        "Email: " + (fd.get("email") || ""),
+        "Teléfono: " + (fd.get("telefono") || "(no indicado)"),
+        "Servicio de interés: " + (fd.get("servicio") || "(no indicado)"),
+        "Presupuesto mensual: " + (fd.get("presupuesto") || "(no indicado)"),
         "",
         "Mensaje:",
-        (message ? message.value : "")
+        fd.get("mensaje") || ""
       ].join("\n");
+      window.location.href = "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      setStatus("info", "Abrimos tu programa de correo con el mensaje listo para enviar. Si no se abrió, escríbenos a <a href=\"mailto:" + to + "\">" + to + "</a>.");
+    }
 
-      var mailto = form.getAttribute("action") || "mailto:hola@fuseconsultora.com";
-      var link = mailto + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var fields = $$("input, select, textarea", form).filter(function (f) { return f.name && f.name !== "website"; });
+      var firstBad = null;
+      fields.forEach(function (f) { if (!validateField(f) && !firstBad) firstBad = f; });
+      if (!form.checkValidity()) { form.reportValidity(); if (firstBad) firstBad.focus(); return; }
 
-      window.location.href = link;
+      var fd = new FormData(form);
+      var payload = {};
+      fd.forEach(function (v, k) { payload[k] = typeof v === "string" ? v.trim() : v; });
+      payload.page = location.pathname;
 
-      if (success) {
-        success.classList.add("is-visible");
-        success.setAttribute("tabindex", "-1");
-        success.focus({ preventScroll: true });
-      }
-      form.reset();
+      btn.setAttribute("aria-busy", "true");
+      status.className = "form-status";
+
+      fetch(formCfg.endpoint || "/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (json) { return { res: res, json: json }; });
+      }).then(function (r) {
+        if (r.res.ok && r.json.ok) {
+          form.reset();
+          if (counter && msg) counter.textContent = "0 / " + (msg.getAttribute("maxlength") || 2000);
+          if (window.turnstile) try { window.turnstile.reset(); } catch (_) {}
+          setStatus("success", "<strong>¡Mensaje recibido!</strong>&nbsp;Te responderemos muy pronto al correo que nos dejaste (revisa también la carpeta de spam).");
+          status.setAttribute("tabindex", "-1"); status.focus();
+          if (typeof window.zaraz !== "undefined") try { window.zaraz.track("lead"); } catch (_) {}
+          return;
+        }
+        // El servidor de formularios aún no está configurado (o estamos en local): usamos el correo
+        if ([404, 405, 501, 503].indexOf(r.res.status) !== -1) { mailtoFallback(fd); return; }
+        setStatus("error", (r.json && r.json.error) || "No pudimos enviar tu mensaje. Intenta de nuevo en un momento.");
+      }).catch(function () {
+        mailtoFallback(fd);
+      }).then(function () {
+        btn.removeAttribute("aria-busy");
+      });
     });
+  }
+
+  /* ---------- Botón flotante de WhatsApp ---------- */
+  function initWhatsApp() {
+    var fab = $("[data-wa-fab]");
+    if (!fab) return;
+    var link = waLink();
+    if (!link) { fab.hidden = true; return; }
+    fab.setAttribute("href", link);
+    fab.hidden = false;
   }
 
   /* ---------- Año dinámico en footer ---------- */
   function mountYear() {
-    var els = $$("[data-year]");
     var year = String(new Date().getFullYear());
-    els.forEach(function (el) { el.textContent = year; });
+    $$("[data-year]").forEach(function (el) { el.textContent = year; });
   }
 
   function boot() {
+    safe(mountBrand, "mountBrand");
+    safe(initScrollUI, "initScrollUI");
     safe(initNav, "initNav");
     safe(initHeroGradient, "initHeroGradient");
+    safe(initSlogan, "initSlogan");
     safe(initReveals, "initReveals");
-    safe(initMagnetic, "initMagnetic");
-    safe(initAnchorScroll, "initAnchorScroll");
+    safe(initCounters, "initCounters");
+    safe(initPointerFx, "initPointerFx");
+    safe(initScrollSpy, "initScrollSpy");
+    safe(initQuiz, "initQuiz");
     safe(initContactForm, "initContactForm");
+    safe(initWhatsApp, "initWhatsApp");
     safe(mountYear, "mountYear");
     document.documentElement.classList.add("is-ready");
   }
