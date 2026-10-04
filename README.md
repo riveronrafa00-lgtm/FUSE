@@ -85,7 +85,7 @@ node scripts/check-site.mjs          # revisar enlaces
 ## Pendientes antes de lanzar
 
 - Email del sitio: hoy vacío a propósito; se activa poniendo `contact.email` en el manifest y `CONTACT_TO` en Cloudflare.
-- Confirmar el dominio: hoy las URLs canónicas, `sitemap.xml` y `robots.txt` usan `https://fuseconsultora.com`.
+- Dirección: hoy las URLs canónicas, `sitemap.xml` y `robots.txt` usan `https://riveronrafa00-lgtm.github.io/fuseconsultora` (GitHub Pages). Si conectas un dominio propio, reemplázala en todos los `.html`, `sitemap.xml`, `robots.txt` y en la `<base>` de `404.html`.
 - Testimonios: sección oculta (`hidden` en `index.html`) hasta tener reseñas reales.
 - Logo: se usa el imagotipo oficial (`assets/img/fuse-logo.webp`, `fuse-imagotipo.webp`, `fuse-simbolo.webp`). Si llega el archivo vectorial (SVG/AI), conviene reemplazarlos.
 - Revisión legal de la política de privacidad.

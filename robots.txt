@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://fuseconsultora.com/sitemap.xml
+Sitemap: https://riveronrafa00-lgtm.github.io/fuseconsultora/sitemap.xml
