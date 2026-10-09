@@ -1160,7 +1160,9 @@ html:has(.subnav) { scroll-padding-top: calc(var(--nav-h) + 72px); }
    ============================================================= */
 .lite .hero-gradient { filter: none; opacity: .7; }
 .lite .halo, .lite .hero-grain, .lite .grid-bg, .lite .cta-final::before, .lite .hero-visual .orbit { display: none; }
-.lite *, .lite *::before, .lite *::after { animation: none !important; }
+/* Las animaciones se mantienen: franja, giros, flotados y pulsos son
+   transformaciones baratas. Lo costoso (desenfoques, grano, halos) ya se
+   oculta arriba. */
 .lite .nav, .lite .subnav, .lite .booking::backdrop { backdrop-filter: none; -webkit-backdrop-filter: none; }
 .lite .nav { background: rgba(8, 17, 31, 0.96); }
 .lite .hero .slogan span { opacity: 1; }
