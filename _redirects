@@ -13,3 +13,6 @@
 /privacidad     /politica-privacidad   301
 /privacy        /politica-privacidad   301
 /instagram      https://www.instagram.com/fuse_plus/ 302
+
+# La app interna de pedidos (apps/pedidos) no forma parte del sitio público
+/apps/*         /                      302

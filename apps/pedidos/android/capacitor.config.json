@@ -1,0 +1,12 @@
+{
+  "appId": "cu.empresa.pedidos",
+  "appName": "Pedidos",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": true
+  },
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  }
+}

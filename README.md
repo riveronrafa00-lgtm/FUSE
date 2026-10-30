@@ -33,6 +33,7 @@ robots.txt, sitemap.xml    SEO
 site.webmanifest           ícono al "añadir a pantalla de inicio"
 scripts/check-site.mjs     revisión de enlaces rotos (también corre en GitHub Actions)
 wrangler.toml.example      config opcional para pruebas locales con Wrangler
+apps/pedidos/              app interna de pedidos pendientes (SQL Server + API + Android); ver su README
 ```
 
 ## Editar lo más común

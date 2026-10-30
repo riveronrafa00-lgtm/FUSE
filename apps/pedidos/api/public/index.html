@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cartera de pedidos</title>
+  <meta name="description" content="Pedidos pendientes por cliente, SKU y antigüedad, en hectolitros y unidades.">
+  <meta name="theme-color" content="#0b1f3a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="app.css?v=1">
+  <script src="config.js?v=1"></script>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+      <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v5h-5"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16M21 21l-4.35-4.35"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+      <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+      <symbol id="i-warn" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0M12 9v4M12 17h.01"/></symbol>
+      <symbol id="i-beer" viewBox="0 0 24 24"><path d="M6 8h9v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zM15 11h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2M6 8a3 3 0 0 1 3-4 3 3 0 0 1 5 1 2.5 2.5 0 0 1 1 3M9 12v5M12 12v5"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3 2"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="shell" id="shell" hidden>
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark" aria-hidden="true"><svg><use href="#i-beer"/></svg></span>
+        <div class="brand-txt">
+          <strong id="marca">Cartera de pedidos</strong>
+          <span id="live" class="live" aria-live="polite"><i></i><b>Conectando…</b></span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="seg seg-dark" role="radiogroup" aria-label="Unidad de medida">
+          <button role="radio" data-unidad="HL" aria-checked="true">HL</button>
+          <button role="radio" data-unidad="UND" aria-checked="false">Und</button>
+        </div>
+        <button class="icon-btn" id="btn-refresh" aria-label="Actualizar ahora"><svg><use href="#i-refresh"/></svg></button>
+        <button class="icon-btn" id="btn-ajustes" aria-label="Ajustes"><svg><use href="#i-gear"/></svg></button>
+      </div>
+    </header>
+
+    <nav class="tabbar" aria-label="Secciones">
+      <button data-vista="resumen" aria-current="page"><svg><use href="#i-home"/></svg><span>Resumen</span></button>
+      <button data-vista="pedidos"><svg><use href="#i-list"/></svg><span>Pedidos</span></button>
+      <button data-vista="clientes"><svg><use href="#i-users"/></svg><span>Clientes</span></button>
+      <button data-vista="skus"><svg><use href="#i-box"/></svg><span>SKU</span></button>
+    </nav>
+
+    <section class="filters" aria-label="Filtros">
+      <label class="search">
+        <svg><use href="#i-search"/></svg>
+        <input id="q" type="search" placeholder="Buscar cliente, pedido o SKU" autocomplete="off" enterkeyhint="search">
+      </label>
+      <div class="seg seg-cat" role="radiogroup" aria-label="Categoría" id="cat">
+        <button role="radio" data-cat="" aria-checked="true">Todo</button>
+        <button role="radio" data-cat="CERVEZA" aria-checked="false">Cerveza</button>
+        <button role="radio" data-cat="MALTA" aria-checked="false">Malta</button>
+        <button role="radio" data-cat="OTROS" aria-checked="false">Otros</button>
+      </div>
+      <div class="chips-activos" id="activos"></div>
+    </section>
+
+    <div class="banner" id="banner" hidden></div>
+    <main id="vista" class="vista" tabindex="-1"></main>
+  </div>
+
+  <!-- Detalle de pedido / ajustes -->
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-bg" data-cerrar></div>
+    <article class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <header class="sheet-head">
+        <button class="icon-btn" data-cerrar aria-label="Cerrar"><svg><use href="#i-back"/></svg></button>
+        <h2 id="sheet-title"></h2>
+      </header>
+      <div class="sheet-body" id="sheet-body"></div>
+    </article>
+  </div>
+
+  <!-- Acceso -->
+  <div class="login" id="login" hidden>
+    <form class="login-card" id="login-form" autocomplete="on">
+      <span class="mark mark-lg" aria-hidden="true"><svg><use href="#i-beer"/></svg></span>
+      <h1 id="login-marca">Cartera de pedidos</h1>
+      <p class="muted">Pedidos pendientes en tiempo real</p>
+      <label class="field" id="campo-servidor">
+        <span>Servidor de la API</span>
+        <input id="l-servidor" type="url" inputmode="url" placeholder="http://192.168.1.20:8080" autocomplete="url">
+      </label>
+      <label class="field">
+        <span>Código de acceso</span>
+        <input id="l-token" type="password" required autocomplete="current-password">
+      </label>
+      <p class="error" id="login-error" role="alert"></p>
+      <button class="btn btn-primary" type="submit">Entrar</button>
+      <button class="btn btn-link" type="button" id="l-mostrar-servidor">Cambiar servidor</button>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="app.js?v=1" defer></script>
+</body>
+</html>
