@@ -1,4 +1,4 @@
-# Cartera de pedidos: pedidos pendientes en tiempo real (Exact Globe, `cmch-dc1` / BD `900`)
+# Mi Cerveza · Cartera de pedidos: pedidos pendientes en tiempo real (Exact Globe, `cmch-dc1` / BD `900`)
 
 Este panel muestra los pedidos de venta pendientes por **cliente**, **SKU** y **antigüedad**. Cerveza y malta se ven en **hectolitros (HL)**. Los promocionales y los demás artículos se ven en **unidades** y nunca se suman a los HL. Funciona en Android de dos maneras: como app instalada desde Chrome (PWA) o como un APK propio.
 
@@ -195,7 +195,13 @@ En `capacitor.config.json` cambia `appId` por el identificador de tu empresa ant
 - **El "pagado" está corregido.** Antes había una subconsulta por cada fila que sumaba todas las cuentas. Ahora se calcula una vez por factura y solo con las cuentas de deudores (`omzrek = 'D'`).
 - **El panel no usa frameworks.** Unos 40 KB en total y abre al instante.
 
-## 4. API (por si se quiere conectar Excel, Power BI u otra app)
+## 4. Marca
+
+- El logo está en `api/public/img/logo.png` y los íconos de Android en `api/public/icons/`. Los colores de marca están al inicio de `api/public/app.css` (`--navy: #013066`, `--amber: #F0D047`).
+- El nombre que aparece en la app se cambia en `api/public/config.js` (`marca`).
+- Si tienes el logo en SVG o en PNG de 1024 px o más, reemplaza `img/logo.png` y vuelve a generar los íconos: el que hay ahora es pequeño (188 × 279 px) y en el ícono de 512 px se ve algo suave.
+
+## 5. API (por si se quiere conectar Excel, Power BI u otra app)
 
 Todas las rutas requieren la cabecera `Authorization: Bearer <código>`.
 
@@ -213,7 +219,7 @@ Ejemplo: tu consulta original vía API.
 /api/kardex?artcode=71020000000000000000&reknr=189000004&almacen=A410&res_id=60683&desde=2026-05-01&hasta=2026-06-08
 ```
 
-## 5. Puntos que hay que confirmar con contabilidad o con el partner de Exact
+## 6. Puntos que hay que confirmar con contabilidad o con el partner de Exact
 
 1. **Nombres de las cantidades en `orsrg`** (`esr_aantal` y `aant_gelev`). Se confirman en el paso 1.
 2. **Pedidos cerrados.** Exact pasa a `orhkrg`/`orhsrg` los pedidos procesados por completo. Por eso la app muestra la **cartera abierta**. Los estados "Facturado" y "Cobrado" solo aparecen mientras el pedido sigue en las tablas abiertas.

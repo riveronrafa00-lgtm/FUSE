@@ -4,7 +4,7 @@
 (() => {
   "use strict";
 
-  const CFG = Object.assign({ marca: "Cartera de pedidos", refrescoSegundos: 30, unidadInicial: "HL", servidor: "" }, window.APP_CONFIG || {});
+  const CFG = Object.assign({ marca: "Mi Cerveza", refrescoSegundos: 30, unidadInicial: "HL", servidor: "" }, window.APP_CONFIG || {});
   const NATIVO = !!window.Capacitor?.isNativePlatform?.();
 
   /* ---------- Almacenamiento local (tolerante a fallos) ---------- */

@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Cartera de pedidos</title>
+  <title>Mi Cerveza · Pedidos</title>
   <meta name="description" content="Pedidos pendientes por cliente, SKU y antigüedad, en hectolitros y unidades.">
-  <meta name="theme-color" content="#0b1f3a">
+  <meta name="theme-color" content="#013066">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="app.css?v=1">
-  <script src="config.js?v=1"></script>
+  <link rel="stylesheet" href="app.css?v=2">
+  <script src="config.js?v=2"></script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -38,9 +38,9 @@
   <div class="shell" id="shell" hidden>
     <header class="topbar">
       <div class="brand">
-        <span class="mark" aria-hidden="true"><svg><use href="#i-beer"/></svg></span>
+        <span class="mark"><img src="img/logo.png" alt="" width="20" height="30"></span>
         <div class="brand-txt">
-          <strong id="marca">Cartera de pedidos</strong>
+          <strong id="marca">Mi Cerveza</strong>
           <span id="live" class="live" aria-live="polite"><i></i><b>Conectando…</b></span>
         </div>
       </div>
@@ -94,9 +94,9 @@
   <!-- Acceso -->
   <div class="login" id="login" hidden>
     <form class="login-card" id="login-form" autocomplete="on">
-      <span class="mark mark-lg" aria-hidden="true"><svg><use href="#i-beer"/></svg></span>
-      <h1 id="login-marca">Cartera de pedidos</h1>
-      <p class="muted">Pedidos pendientes en tiempo real</p>
+      <span class="mark mark-lg"><img src="img/logo.png" alt="Mi Cerveza" width="46" height="70"></span>
+      <h1 id="login-marca">Mi Cerveza</h1>
+      <p class="muted">Cartera de pedidos en tiempo real</p>
       <label class="field" id="campo-servidor">
         <span>Servidor de la API</span>
         <input id="l-servidor" type="url" inputmode="url" placeholder="http://192.168.1.20:8080" autocomplete="url">
@@ -112,6 +112,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" hidden></div>
-  <script src="app.js?v=1" defer></script>
+  <script src="app.js?v=2" defer></script>
 </body>
 </html>

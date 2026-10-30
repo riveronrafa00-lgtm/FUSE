@@ -1,6 +1,6 @@
 {
   "appId": "cu.empresa.pedidos",
-  "appName": "Pedidos",
+  "appName": "Mi Cerveza",
   "webDir": "www",
   "android": {
     "allowMixedContent": true
